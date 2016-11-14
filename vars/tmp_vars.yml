@@ -1,0 +1,4 @@
+---
+openvpn_gen_crypted_pw1: "python -c 'from passlib.hash import sha512_crypt; import sys; pw=\""
+openvpn_gen_crypted_pw2: "\"; print sha512_crypt.encrypt(pw)'"
+openvpn_gen_crypted_pw3: "{{ openvpn_gen_crypted_pw1 }}{{ openvpn_user_passwd.stdout_lines[0] }}{{ openvpn_gen_crypted_pw2 }}"
