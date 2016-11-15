@@ -18,3 +18,4 @@
      - bridge-utils
      - zip
      - python-passlib
+     - dos2unix

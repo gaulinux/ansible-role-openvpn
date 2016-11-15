@@ -3,7 +3,7 @@
 # tun device wont show up if server is not rebooted (need to understand why, would be nice to avoid it)
 #
 - name: Restart server
-  shell: reboot
+  shell: sleep 2 && shutdown -r now "Ansible updates triggered"
   async: 1
   poll: 0
   ignore_errors: true
@@ -11,6 +11,6 @@
 - name: Waiting for server to come back
   local_action: 
         wait_for host={{ ansible_ssh_host | default(inventory_hostname) }} 
-        state=started port=22 delay=30 
-        timeout=300 connect_timeout=15
+        state=started port=22 delay=60 
+        timeout=600 connect_timeout=15
   become: false

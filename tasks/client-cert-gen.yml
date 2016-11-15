@@ -1,7 +1,8 @@
 ---
-- name: Define random passwordi I
+- name: Define random password I
   action: "command openssl rand -base64 12"
   register: openvpn_user_passwd
+
 - debug: msg="temporary password {{ openvpn_user_passwd.stdout_lines[0] }}"
 
 - name: Define random passwordi II
@@ -29,34 +30,34 @@
 - name: Build client certificate package I
   shell: >
          chdir={{ openvpn_easy_rsa_dir }}/keys
-         mkdir -p lab-cec-evo-infa_{{ openvpn_client_cert_name }} &&
-         cp {{ openvpn_client_cert_name }}.key lab-cec-evo-infa_{{ openvpn_client_cert_name }} &&
-         cp {{ openvpn_client_cert_name }}.crt lab-cec-evo-infa_{{ openvpn_client_cert_name }} &&
-         cp ca.crt lab-cec-evo-infa_{{ openvpn_client_cert_name }}
+         mkdir -p {{openvpn_client_cert_filename_prefix }}_{{ openvpn_client_cert_name }} &&
+         cp {{ openvpn_client_cert_name }}.key {{openvpn_client_cert_filename_prefix }}_{{ openvpn_client_cert_name }} &&
+         cp {{ openvpn_client_cert_name }}.crt {{openvpn_client_cert_filename_prefix }}_{{ openvpn_client_cert_name }} &&
+         cp ca.crt {{openvpn_client_cert_filename_prefix }}_{{ openvpn_client_cert_name }}
 
 - name: Push client.conf template
   template:
     src: "{{ openvpn_client_dot_conf_file }}"
-    dest: "{{ openvpn_easy_rsa_dir }}/keys/lab-cec-evo-infa_{{ openvpn_client_cert_name }}/lab-cec-evo-infa_{{ openvpn_client_cert_name }}.ovpn"
+    dest: "{{ openvpn_easy_rsa_dir }}/keys/{{openvpn_client_cert_filename_prefix }}_{{ openvpn_client_cert_name }}/{{openvpn_client_cert_filename_prefix }}_{{ openvpn_client_cert_name }}.ovpn"
 
 - name: Push client_userinfo_file template
   template:
     src: "{{ openvpn_client_userinfo_file }}"
-    dest: "{{ openvpn_easy_rsa_dir }}/keys/lab-cec-evo-infa_{{ openvpn_client_cert_name }}/{{ openvpn_client_userinfo_file }}"
+    dest: "{{ openvpn_easy_rsa_dir }}/keys/{{openvpn_client_cert_filename_prefix }}_{{ openvpn_client_cert_name }}/{{ openvpn_client_userinfo_file }}"
 
 - name: Convert config files to DOS format
   shell: >
-         unix2dos {{ openvpn_easy_rsa_dir }}/keys/lab-cec-evo-infa_{{ openvpn_client_cert_name }}/lab-cec-evo-infa_{{ openvpn_client_cert_name }}.ovpn &&
-         unix2dos {{ openvpn_easy_rsa_dir }}/keys/lab-cec-evo-infa_{{ openvpn_client_cert_name }}/{{ openvpn_client_userinfo_file }}
+         unix2dos {{ openvpn_easy_rsa_dir }}/keys/{{openvpn_client_cert_filename_prefix }}_{{ openvpn_client_cert_name }}/{{openvpn_client_cert_filename_prefix }}_{{ openvpn_client_cert_name }}.ovpn &&
+         unix2dos {{ openvpn_easy_rsa_dir }}/keys/{{openvpn_client_cert_filename_prefix }}_{{ openvpn_client_cert_name }}/{{ openvpn_client_userinfo_file }}
 
 - name: Build client certificate package II
   shell: >
          chdir={{ openvpn_easy_rsa_dir }}/keys/
-         zip -r lab-cec-evo-infa_{{ openvpn_client_cert_name }} lab-cec-evo-infa_{{ openvpn_client_cert_name }}
+         zip -r {{openvpn_client_cert_filename_prefix }}_{{ openvpn_client_cert_name }} {{openvpn_client_cert_filename_prefix }}_{{ openvpn_client_cert_name }}
 
 - name: Fetch client certificate package
   fetch: 
-    src={{ openvpn_easy_rsa_dir }}/keys/lab-cec-evo-infa_{{ openvpn_client_cert_name }}.zip
-    dest={{ lookup('env', 'PWD') }}/lab-cec-evo-infa_{{ openvpn_client_cert_name }}.zip
+    src={{ openvpn_easy_rsa_dir }}/keys/{{openvpn_client_cert_filename_prefix }}_{{ openvpn_client_cert_name }}.zip
+    dest={{ lookup('env', 'PWD') }}/{{openvpn_client_cert_filename_prefix }}_{{ openvpn_client_cert_name }}.zip
     flat=yes
 

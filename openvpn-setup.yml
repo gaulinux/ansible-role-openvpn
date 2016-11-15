@@ -2,31 +2,28 @@
 #
 # Usage: 
 #
-#   ansible-playbook openvpn-setup.yml --ask-become-pass --extra-vars "openvpn_gen_server_cert=True hosts=< Ansible_target_hosts >"
 #
-
+#   1) OpenVPN installation and configuration: 
+#
+#      ansible-playbook openvpn-setup.yml --ask-become-pass --extra-vars "hosts=< Ansible_target_hosts > openvpn_do_server_config=True"
+#
+#
+#   2) OpenVPN installation and configuration: 
+#
+#      ansible-playbook openvpn-setup.yml --ask-become-pass --extra-vars "hosts=< Ansible_target_hosts > openvpn_gen_server_cert=True"
+#
+#
+#
 - hosts: "{{ hosts }}"
 
-  roles:
-    - role: ~/ansible-role-openvpn
-
-      #####
-      # This playbook target server,
-      # disabling client certificate generation is not indicate
-      #
-      openvpn_gen_client_cert: False
-      openvpn_do_server_config: True
-
-      #####
-      # openvpn_gen_server_cert, intentionally set to False
-      # to prevent acidental server certificate regeneration
-      #
-      openvpn_gen_server_cert: False 
-
-      openvpn_server: n.n.n.n
+  vars:
+      openvpn_server: ovpn.example.com
       openvpn_key_country: XX
       openvpn_key_province: YY
       openvpn_key_city: Sometown
-      openvpn_key_org:  some.org
+      openvpn_key_org: example.com
       openvpn_key_email: noreply@example.com
-      openvpn_key_ou: vpn.some.org 
+      openvpn_key_ou: unit.example.com
+
+  roles:
+    - role: ~/ansible-role-openvpn

@@ -7,7 +7,9 @@
 
 - hosts: "{{ hosts }}"
 
+  vars:
+      openvpn_client_cert_filename_prefix: "my_vpn_cert_xxx_"
+
   roles:
     - role: ~/ansible-role-openvpn
       openvpn_gen_client_cert: True
-      openvpn_server: n.n.n.n

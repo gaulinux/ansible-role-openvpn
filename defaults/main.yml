@@ -1,2 +1,23 @@
----
 # defaults file for openvpn
+---
+openvpn_gen_server_cert: False
+openvpn_do_server_config: False
+openvpn_gen_client_cert: False
+
+openvpn_server: ovpn.example.com
+openvpn_key_country: XX
+openvpn_key_province: YY
+openvpn_key_city: Sometown
+openvpn_key_org: example.com
+openvpn_key_email: noreply@example.com
+openvpn_key_ou: unit.example.com
+
+openvpn_easy_rsa_dir: /etc/openvpn/easy-rsa
+openvpn_easy_rsa_vars_file: etc/openvpn/easy-rsa/vars
+
+openvpn_client_config_dir: /etc/openvpn/ccd
+openvpn_server_dot_conf_file: etc/openvpn/server.conf
+openvpn_client_dot_conf_file: client.ovpn
+openvpn_client_userinfo_file: userinfo
+openvpn_auth_user_pass_verify_script: etc/openvpn/ucn.pl
+openvpn_systemd_service_patch_file: lib/systemd/system/openvpn@.service
